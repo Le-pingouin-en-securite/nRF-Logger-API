@@ -1,0 +1,115 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# for more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-pathFor
+
+name: Maven Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Publish to GitHub Packages Apache Maven
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+            - nombre: caché
+            
+  usos: acciones/cache@v3.3.2
+  con:
+    # Una lista de archivos, directorios y patrones comodín para almacenar en caché y restaurar
+    camino:
+    # Una clave explícita para restaurar y guardar el caché
+    llave:
+    # Una lista ordenada de claves que se utilizarán para restaurar el caché obsoleto si no se produjo ningún acceso al caché para la clave. Tenga en cuenta que `cache-hit` devuelve falso en este caso.
+    restaurar claves: # opcional
+    # El tamaño del fragmento utilizado para dividir archivos grandes durante la carga, en bytes
+    tamaño del fragmento de carga: # opcional
+    # Un valor booleano opcional, cuando está habilitado, permite a los corredores de Windows guardar o restaurar cachés que se pueden restaurar o guardar respectivamente en otras plataformas.
+    enableCrossOsArchive: # opcional, el valor predeterminado es falso
+    # Falla el flujo de trabajo si no se encuentra la entrada de caché
+    fail-on-cache-miss: # opcional, el valor predeterminado es falso
+    # Comprobar si existe una entrada de caché para las entradas dadas (clave, claves de restauración) sin descargar el caché
+    solo búsqueda: # opcional, el valor predeterminado es falso
+
+                - nombre: Configurar Java JDK
+  usos: acciones/setup-java@v3.13.0
+  con:
+    # La versión de Java a configurar. Toma una versión completa o parcial de Java. Vea ejemplos de sintaxis admitidas en el archivo README
+    versión java: # opcional
+    # La ruta al archivo `.java-version`. Vea ejemplos de sintaxis admitidas en el archivo README
+    archivo-versión-java: # opcional
+    # Distribución de Java. Vea la lista de distribuciones compatibles en el archivo README
+    distribución:
+    # El tipo de paquete (jdk, jre, jdk+fx, jre+fx)
+    paquete java: # opcional, el valor predeterminado es jdk
+    # La arquitectura del paquete (por defecto es la arquitectura del ejecutor de acciones)
+    arquitectura: # opcional
+    # Ruta hacia donde se encuentra el JDK comprimido
+    Archivo jdk: # opcional
+    # Establezca esta opción si desea que la acción busque la última versión disponible que satisfaga la especificación de versión
+    comprobar lo último: # opcional
+    # ID del repositorio de DistributionManagement en el archivo pom.xml. El valor predeterminado es `github`
+    ID del servidor: # opcional, el valor predeterminado es github
+    # Nombre de la variable de entorno para el nombre de usuario para la autenticación en el repositorio de Apache Maven. El valor predeterminado es $GITHUB_ACTOR
+    nombre de usuario del servidor: # opcional, el valor predeterminado es GITHUB_ACTOR
+    # Nombre de la variable de entorno para la contraseña o token para la autenticación en el repositorio de Apache Maven. El valor predeterminado es $GITHUB_TOKEN
+    contraseña del servidor: # opcional, el valor predeterminado es GITHUB_TOKEN
+    # Ruta donde se escribirá el archivo settings.xml. El valor predeterminado es ~/.m2.
+    ruta-configuración: # opcional
+    # Sobrescriba el archivo settings.xml si existe. El valor predeterminado es "verdadero".
+    configuración de sobrescritura: # opcional, el valor predeterminado es verdadero
+    # Clave privada GPG para importar. El valor predeterminado es una cadena vacía.
+    gpg-clave-privada: # opcional
+    # Nombre de la variable de entorno para la frase de contraseña de la clave privada GPG. El valor predeterminado es $GPG_PASSPHRASE.
+    frase de contraseña gpg: # opcional
+    # Nombre de la plataforma de compilación para almacenar en caché las dependencias. Puede ser "maven", "gradle" o "sbt".
+    caché: # opcional
+    # Solución alternativa para pasar el estado del trabajo al paso de publicación del trabajo. Esta variable no está diseñada para configuración manual.
+    estado del trabajo: # opcional, el valor predeterminado es ${{ job.status }}
+    # El token utilizado para autenticarse al recuperar manifiestos de versión alojados en github.com, como para Microsoft Build de OpenJDK. Al ejecutar esta acción en github.com, el valor predeterminado es suficiente. Cuando se ejecuta en GHES, puede pasar un token de acceso personal para github.com si experimenta una limitación de velocidad.
+    token: # opcional, el valor predeterminado es ${{ github.server_url == 'https://github.com' && github.token || '' }}
+    # Nombre del ID de Maven Toolchain si no se desea el nombre predeterminado de "${distribution}_${java-version}". Vea ejemplos de sintaxis admitidas en el archivo de uso avanzado
+    mvn-toolchain-id: # opcional
+    # Nombre del proveedor de Maven Toolchain si no se desea el nombre predeterminado de "${distribución}". Vea ejemplos de sintaxis admitidas en el archivo de uso avanzado
+    proveedor-mvn-toolchain: # opcional
+          
+                      - nombre: Configurar el SDK de .NET Core
+  usos: acciones/setup-dotnet@v3.2.0
+  con:
+    # Versiones de SDK opcionales a utilizar. Si no se proporciona, instalará la versión global.json cuando esté disponible. Ejemplos: 2.2.104, 3.1, 3.1.x, 3.x, 6.0.2xx
+    versión dotnet: # opcional
+    # Calidad opcional de la construcción. Los valores posibles son: diario, firmado, validado, vista previa, ga.
+    calidad dotnet: # opcional
+    # Ubicación opcional de global.json, si su global.json no está ubicado en la raíz del repositorio.
+    archivo-json-global: # opcional
+    # Fuente de paquete opcional para configurar la autenticación. Consultará cualquier NuGet.config existente en la raíz del repositorio y proporcionará un NuGet.config temporal utilizando la variable de entorno NUGET_AUTH_TOKEN como ClearTextPassword.
+    URL de origen: # opcional
+    # PROPIETARIO opcional para usar paquetes de organizaciones/usuarios del Registro de paquetes de GitHub que no sean el propietario del repositorio actual. Solo se usa si también se proporciona una URL GPR en la URL de origen
+    propietario: # opcional
+    # Ubicación opcional de NuGet.config, si su NuGet.config no está ubicado en la raíz del repositorio.
+    archivo de configuración: # opcional
+    # Entrada opcional para habilitar el almacenamiento en caché de la carpeta de paquetes globales de NuGet
+    caché: # opcional
+    # Se utiliza para especificar la ruta a un archivo de dependencia: paquetes.lock.json. Admite comodines o una lista de nombres de archivos para almacenar en caché múltiples dependencias.
+    ruta-dependencia-caché: # opcional
+          
